@@ -7,6 +7,23 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
+    <div id="ios-banner" style="display:none; background:#fffbcc; padding:12px; margin:10px 0; border-radius:8px;">
+        📱 To install this app, tap <strong>Share</strong> → <strong>Add to Home Screen</strong>
+      </div>
+  
+      <button id="install-btn" style="display:none; padding:10px 16px; margin-top:10px;">
+        📲 Install App
+      </button>
+    </div>
+  
+    <script src="/static/install.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(() => console.log("✅ SW Registered"))
+          .catch(err => console.log("❌ SW failed:", err));
+      }
+    </script>
 <div class="container">
     <h2>Meal Tracker</h2>
     <form action="/add" method="post">
