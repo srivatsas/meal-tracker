@@ -85,14 +85,17 @@ def index():
     total_calories = sum(m.calories for m in today_meals)
     return render_template('index.html', food_db=food_db, meals=today_meals, time=datetime.now().strftime('%H:%M'), today=today, total_calories=total_calories, goal=user.calorie_goal)
 
+
 @app.route('/add', methods=['POST'])
 def add_meal():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+
     food = request.form['food']
     quantity = float(request.form['quantity'])
     factor = quantity / 100
     user = User.query.get(session['user_id'])
+
     if food in food_db:
         data = food_db[food]
         meal = Meal(
@@ -106,8 +109,9 @@ def add_meal():
             time=request.form['time'],
             date=datetime.now().strftime("%Y-%m-%d")
         )
-        db.session.add(meal)
-        db.session.commit()
+        db.session.add(meal)      # 👈 Must have this
+        db.session.commit()       # 👈 And this
+
     return redirect(url_for('index'))
 
 @app.route('/dashboard')
