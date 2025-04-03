@@ -1,0 +1,17 @@
+<html><head><script src="https://cdn.jsdelivr.net/npm/chart.js"></script></head><body>
+<div style="width: 90%; margin: auto;"><h2>📊 Weekly Calorie Chart</h2>
+<canvas id="chart"></canvas><a href="/home">← Back</a></div>
+<script>
+const ctx = document.getElementById('chart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: {{ labels | safe }},
+    datasets: [{
+      label: 'Calories',
+      data: {{ data | safe }},
+      backgroundColor: 'rgba(54, 162, 235, 0.6)'
+    }]
+  }
+});
+</script></body></html>
