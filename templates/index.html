@@ -1,16 +1,43 @@
-<html><head><link rel="stylesheet" href="/static/style.css"></head><body>
+<html>
+<head>
+    <title>Meal Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 <div class="container">
-<h2>Meal Tracker</h2>
-<form action="/add" method="post">
-<input name="time" value="{{ time }}" placeholder="Time"><br>
-<select name="food">{% for f in food_db %}<option>{{ f }}</option>{% endfor %}</select><br>
-<input name="quantity" placeholder="Quantity (g)" type="number"><br>
-<button type="submit">Add Meal</button></form>
-<h3>Today's Meals ({{ today }})</h3>
-<table><tr><th>Time</th><th>Food</th><th>Qty</th><th>Kcal</th></tr>
-{% for m in meals %}<tr><td>{{ m.time }}</td><td>{{ m.food }}</td><td>{{ m.quantity }}</td><td>{{ m.calories }}</td></tr>{% endfor %}</table>
-<h4>Total: {{ total_calories }} / {{ goal }} kcal</h4>
-<form action="/set_goal" method="post">
-Set Goal: <input type="number" name="goal" value="{{ goal }}"><button type="submit">Update</button>
-</form>
-<p><a href="/dashboard">📊 View Weekly Chart</a> | <a href="/logout">Logout</a></p></div></body></html>
+    <h2>Meal Tracker</h2>
+    <form action="/add" method="post">
+        <input name="time" value="{{ time }}" placeholder="Time" required>
+        <select name="food" required>
+            {% for f in food_db %}
+                <option>{{ f }}</option>
+            {% endfor %}
+        </select>
+        <input name="quantity" type="number" placeholder="Quantity (g)" required>
+        <button type="submit">Add Meal</button>
+    </form>
+
+    <h3>Today's Meals ({{ today }})</h3>
+    <table>
+        <tr><th>Time</th><th>Food</th><th>Qty</th><th>kcal</th></tr>
+        {% for m in meals %}
+        <tr>
+            <td>{{ m.time }}</td><td>{{ m.food }}</td><td>{{ m.quantity }}</td><td>{{ m.calories }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h4>Total: {{ total_calories }} / {{ goal }} kcal</h4>
+    <form action="/set_goal" method="post">
+        <input type="number" name="goal" value="{{ goal }}" placeholder="Set Daily Goal">
+        <button type="submit">Update Goal</button>
+    </form>
+
+    <p style="text-align:center;">
+        <a href="/dashboard">📊 Weekly Chart</a> | 
+        <a href="/logout">Logout</a>
+    </p>
+</div>
+</body>
+</html>
