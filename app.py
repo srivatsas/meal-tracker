@@ -121,6 +121,33 @@ def set_goal():
         db.session.commit()
     return redirect(url_for('index'))
 
+# --------------------
+# 🛡️ Admin Access
+# --------------------
+ADMIN_USERNAME = "admin"
+ADMIN_PASSWORD = "admin123"
+
+@app.route('/admin-login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        if request.form['username'] == ADMIN_USERNAME and request.form['password'] == ADMIN_PASSWORD:
+            session['is_admin'] = True
+            return redirect(url_for('admin_dashboard'))
+    return render_template('admin-login.html')
+
+@app.route('/logout-admin')
+def logout_admin():
+    session.pop('is_admin', None)
+    return redirect(url_for('admin_login'))
+
+@app.route('/admin-dashboard')
+def admin_dashboard():
+    if not session.get('is_admin'):
+        return redirect(url_for('admin_login'))
+    users = User.query.all()
+    meals = Meal.query.order_by(Meal.date.desc()).all()
+    return render_template('admin-dashboard.html', users=users, meals=meals)
+
 if __name__ == '__main__':
     if not os.path.exists('meals.db'):
         with app.app_context():
