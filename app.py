@@ -20,6 +20,7 @@ class User(db.Model):
 class Meal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('meals', lazy=True))
     food = db.Column(db.String(100))
     quantity = db.Column(db.Float)
     calories = db.Column(db.Float)
