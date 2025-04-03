@@ -41,6 +41,14 @@ food_db = {
     'Protein Shake': {'calories': 120, 'protein': 26, 'carbs': 2, 'fats': 1}
 }
 
+@app.route('/manifest.json')
+def manifest():
+    return send_from_directory('.', 'manifest.json')
+
+@app.route('/service-worker.js')
+def sw():
+    return send_from_directory('.', 'service-worker.js')
+
 @app.route('/', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
