@@ -141,13 +141,23 @@ def logout_admin():
     session.pop('is_admin', None)
     return redirect(url_for('admin_login'))
 
-@app.route('/admin-dashboard')
+@app.route('/admin-dashboard', methods=['GET', 'POST'])
 def admin_dashboard():
     if not session.get('is_admin'):
         return redirect(url_for('admin_login'))
+
     users = User.query.all()
-    meals = Meal.query.order_by(Meal.date.desc()).all()
-    return render_template('admin-dashboard.html', users=users, meals=meals)
+    selected_user = request.args.get('user_id', type=int)
+    selected_date = request.args.get('date', default=None)
+
+    query = Meal.query.join(User).order_by(Meal.date.desc())
+    if selected_user:
+        query = query.filter(Meal.user_id == selected_user)
+    if selected_date:
+        query = query.filter(Meal.date == selected_date)
+
+    meals = query.all()
+    return render_template('admin-dashboard.html', users=users, meals=meals, selected_user=selected_user, selected_date=selected_date)
 
 if __name__ == '__main__':
     if not os.path.exists('meals.db'):
